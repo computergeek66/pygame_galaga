@@ -17,7 +17,7 @@ Things that have not been done (in no particular order):
 			 to decrease your testing time :)
 
 I'm sure there are many more! I've tried to resolve all the bugs and crashes encountered, but I'm not promising it's perfect.
-Please share your progress with me via Slack or email (trey@tech901.org). I don't care how long after class it is, I want to hear from you!
+Please share your progress with me via Slack or email. I don't care how long after class it is, I want to hear from you!
 
 
 
