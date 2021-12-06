@@ -1,4 +1,4 @@
-import pygame, sys, random, time
+import pygame, sys, random, time, os
 from pygame.locals import *
 
 ##All drawable objects include this class
@@ -71,9 +71,7 @@ class Effect:
         self.drawable = drawable
         self.drawable.rect.centerx = x
         self.drawable.rect.centery = y
-        
         self.type = type
-        
         if(self.type == "explosion"):
             self.drawable.initialize_animation(2, 2) 
         if(self.type == "player_explosion"):
@@ -111,51 +109,40 @@ FORMATIONS = ['0,0,0,Y,0,0,Y,0,0,0',
              'B,B,B,B,B,B,B,B,B,B',
              'B,B,B,B,B,B,B,B,B,B',
              'B,B,B,B,B,B,B,B,B,B']
-
-BULLETSPEED = 10;
-BULLETSPRITE = [pygame.image.load("Resources\sprites\\bullet.png")]
-
-
-REDENEMY = [pygame.image.load("Resources\sprites\\red enemy.png"), 
-            pygame.image.load("Resources\sprites\\red enemy 2.png")]
-BLUEENEMY = [pygame.image.load("Resources\sprites\\blue enemy.png"), 
-             pygame.image.load("Resources\sprites\\blue enemy 2.png")]
-GREENENEMY = [pygame.image.load("Resources\sprites\\green enemy.png")]
-YELLOWENEMY = [pygame.image.load("Resources\sprites\\yellow enemy.png"), 
-               pygame.image.load("Resources\sprites\\yellow enemy 2.png")]
-YELLOWALT = [pygame.image.load("Resources\sprites\\yellow alt.png"), 
-             pygame.image.load("Resources\sprites\\yellow alt 2.png")]
-                  
-ENEMYEXPLOSION = [pygame.image.load("Resources\sprites\\explosion 1.png"), 
-                  pygame.image.load("Resources\sprites\\explosion 2.png"),
-                  pygame.image.load("Resources\sprites\\explosion 3.png"),
-                  pygame.image.load("Resources\sprites\\explosion 4.png"),
-                  pygame.image.load("Resources\sprites\\explosion 5.png")]
-                  
+             
+BULLETSPRITE = [pygame.image.load(os.path.join("Resources","sprites","bullet.png"))]
+REDENEMY = [pygame.image.load(os.path.join("Resources","sprites","red enemy.png")), 
+            pygame.image.load(os.path.join("Resources","sprites","red enemy 2.png"))]
+BLUEENEMY = [pygame.image.load(os.path.join("Resources","sprites","blue enemy.png")), 
+             pygame.image.load(os.path.join("Resources","sprites","blue enemy 2.png"))]
+GREENENEMY = [pygame.image.load(os.path.join("Resources","sprites","green enemy.png"))]
+YELLOWENEMY = [pygame.image.load(os.path.join("Resources","sprites","yellow enemy.png")), 
+               pygame.image.load(os.path.join("Resources","sprites","yellow enemy 2.png"))]
+YELLOWALT = [pygame.image.load(os.path.join("Resources","sprites","yellow alt.png")), 
+             pygame.image.load(os.path.join("Resources","sprites","yellow alt 2.png"))] 
+ENEMYEXPLOSION = [pygame.image.load(os.path.join("Resources","sprites","explosion 1.png")), 
+                  pygame.image.load(os.path.join("Resources","sprites","explosion 2.png")),
+                  pygame.image.load(os.path.join("Resources","sprites","explosion 3.png")),
+                  pygame.image.load(os.path.join("Resources","sprites","explosion 4.png")),
+                  pygame.image.load(os.path.join("Resources","sprites","explosion 5.png"))]                
 ENEMYEXPLOSIONDRAWBLE = Drawable(ENEMYEXPLOSION, 0, 0)
-
-PLAYEREXPLOSION = [pygame.image.load("Resources\sprites\\player explosion 1.png"), 
-                  pygame.image.load("Resources\sprites\\player explosion 2.png"),
-                  pygame.image.load("Resources\sprites\\player explosion 3.png"),
-                  pygame.image.load("Resources\sprites\\player explosion 4.png")]                   
-
+PLAYEREXPLOSION = [pygame.image.load(os.path.join("Resources","sprites","player explosion 1.png")), 
+                  pygame.image.load(os.path.join("Resources","sprites","player explosion 2.png")),
+                  pygame.image.load(os.path.join("Resources","sprites","player explosion 3.png")),
+                  pygame.image.load(os.path.join("Resources","sprites","player explosion 4.png"))]                   
 PLAYEREXPLOSIONDRAWABLE = Drawable(PLAYEREXPLOSION, 0, 0)
-
-STARSPRITES = [[pygame.image.load("Resources\sprites\\star blue.png")],
-                 [pygame.image.load("Resources\sprites\\star red.png")],
-                 [pygame.image.load("Resources\sprites\\star green.png")],
-                 [pygame.image.load("Resources\sprites\\star purple.png")],
-                 [pygame.image.load("Resources\sprites\\star dkblue.png")]]
+STARSPRITES = [[pygame.image.load(os.path.join("Resources","sprites","star blue.png"))],
+                 [pygame.image.load(os.path.join("Resources","sprites","star red.png"))],
+                 [pygame.image.load(os.path.join("Resources","sprites","star green.png"))],
+                 [pygame.image.load(os.path.join("Resources","sprites","star purple.png"))],
+                 [pygame.image.load(os.path.join("Resources","sprites","star dkblue.png"))]]
                  
-
-
 STARCOUNTMAX = 100
 PLAYERLIVESMAX = 3
 PAUSETICKERMAX = 120
 SHOOTTICKERMAX = 30
-
+BULLETSPEED = 10
 LIVESMAX = 3
-
 FPS = 60
 
 BLACK = (0, 0, 0)
@@ -164,7 +151,7 @@ RED = (255, 0, 0)
 
 pygame.init()
 
-DISPLAYFONT = pygame.font.Font("Resources\\fonts\\Emulogic.ttf", 12)
+DISPLAYFONT = pygame.font.Font(os.path.join("Resources","fonts","Emulogic.ttf"), 12)
 
 DISPLAYSURF = pygame.display.set_mode((400, 600))
 
@@ -178,23 +165,22 @@ points = 0
 highscore = 0
 
 def main():
+    #get access to global variables
     global lives
     global points
     global highscore
     
+    #Pygame magic to make the main game loop run consistently
     fpsClock = pygame.time.Clock()
 
     pause = "False"
     pause_ticker = PAUSETICKERMAX
-
     moveTickerMax = 1
     shoot_ticker = SHOOTTICKERMAX
     move_ticker = moveTickerMax
     
-
     #Create GUI text
     create_GUI()
-    
     
     #Create stars
     for i in range(STARCOUNTMAX):
@@ -204,7 +190,7 @@ def main():
 
     #Set up player
     playerSpeed = 5
-    playerSprite = [pygame.image.load("Resources\sprites\player.png")];
+    playerSprite = [pygame.image.load(os.path.join("Resources","sprites","player.png"))]
     playerx = DISPLAYSURF.get_width()/2 - playerSprite[0].get_width()/2
     playery = DISPLAYSURF.get_height()*.9 - playerSprite[0].get_height()
     player = Drawable(playerSprite, playerx, playery)
@@ -233,8 +219,6 @@ def main():
                 effect.drawable.rect.x = random.randrange(DISPLAYWIDTH)
                 effect.drawable.rect.y = -3
                 
-            
-        
         ##Process information for bullets (hits, offscreen, etc)
         for bullet in bullets:
             if(bullet.drawable.rect.y < 0 or bullet.drawable.rect.y > DISPLAYHEIGHT):
@@ -266,7 +250,6 @@ def main():
                         pause = "Player"
                 bullet.update_bullet()
                 
-                
         ##Update enemy movements
         if pause == "False":
             update_enemies()
@@ -282,7 +265,7 @@ def main():
                 player.rect.x += playerSpeed
             if keys[K_SPACE] and shoot_ticker == 0:
                 shoot_ticker = SHOOTTICKERMAX
-                shoot(player.rect, -1);
+                shoot(player.rect, -1)
                     
             if move_ticker > 0:
                 move_ticker -= 1
@@ -304,8 +287,6 @@ def main():
                 create_enemies()
             pause = "False"
             
-
-         
         ##Update all drawables and draw to the screen
         for drawable in drawables:
             drawable.animate()
@@ -318,11 +299,13 @@ def main():
         pygame.display.update()
         fpsClock.tick(FPS)
     
+    
 #Responsible for creating bullets and assigning a movement vector to them    
 def shoot(rect, direction):
     bullet = Bullet(rect, direction)
     bullets.append(bullet)
     drawables.append(bullet.drawable)
+
 
 ##Creates enemies in the formation specified in the formation array    
 def create_enemies():
@@ -375,9 +358,7 @@ def create_enemies():
             
             xcount += 1
         ycount += 1
-            
-        
-
+         
    
 enemyOffset = 0
 enemyDirection = "left"
