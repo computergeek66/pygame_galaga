@@ -201,6 +201,9 @@ def main():
     global points
     global highscore
 
+    # start up the mixer
+    pygame.mixer.init()
+
     # Pygame magic to make the main game loop run consistently
     fpsClock = pygame.time.Clock()
 
@@ -241,6 +244,7 @@ def main():
     while True:
         for event in pygame.event.get():
             if event.type == QUIT:
+                pygame.mixer.quit()
                 pygame.quit()
                 sys.exit()
 
@@ -356,6 +360,8 @@ def main():
 # Responsible for creating bullets and assigning a movement vector to them
 def shoot(rect, direction):
     bullet = Bullet(rect, direction)
+    snd = pygame.mixer.Sound(os.path.join("Resources", "sounds", "39459__the-bizniss__laser.wav"))
+    snd.play()
     bullets.append(bullet)
     drawables.append(bullet.drawable)
 
@@ -456,15 +462,21 @@ def update_enemies():
 
 
 def destroy(instance):
+    filename = None
     if isinstance(instance, Enemy):
+        filename = os.path.join("Resources", "sounds", "587189__derplayer__explosion-05.wav")
         enemies.remove(instance)
         drawables.remove(instance.drawable)
     elif isinstance(instance, Bullet):
         bullets.remove(instance)
         drawables.remove(instance.drawable)
     else:
+        filename = os.path.join("Resources", "sounds", "270328__littlerobotsoundfactory__hero-death-00.wav")
         drawables.remove(instance)
 
+    if filename:
+        snd = pygame.mixer.Sound(filename)
+        snd.play()
 
 livesDisplay = 0
 livesDisplayRect = 0
